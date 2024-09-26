@@ -1,6 +1,7 @@
 
 /*
  * *** YOUR NAME GOES HERE / YOUR SECTION NUMBER ***
+ *           Ethan Grassia / Section 001 
  *
  * This java file is a Java object implementing simple AVL Tree.
  * You are to complete the deleteElement method.
