@@ -362,6 +362,57 @@ class LUC_AVLTree {
          * do many of the same things as this method.
          */
 
+         if (node == null) {
+            return node; // If node is null, value is not present.
+        }
+    
+        // Recursively traverse the tree to find the node to delete
+        if (value < node.value) {
+            node.leftChild = deleteElement(value, node.leftChild);
+        } else if (value > node.value) {
+            node.rightChild = deleteElement(value, node.rightChild);
+        } else {
+            // Node to be deleted found
+    
+            // Case 1: Node with only one child or no child
+            if (node.leftChild == null || node.rightChild == null) {
+                Node temp = node.leftChild != null ? node.leftChild : node.rightChild;
+                node = temp; // Replace node with its non-null child or null if both are null
+            } else {
+                // Case 2: Node with two children
+                Node temp = minValueNode(node.rightChild); // Find smallest in right subtree
+                node.value = temp.value; // Replace with the smallest value
+                node.rightChild = deleteElement(temp.value, node.rightChild); // Remove the smallest value 
+            }
+        }
+    
+        if (node == null) {
+            return node; // If the node had no children and was removed, return null
+        }
+    
+        // Update height of current node
+        node.height = getMaxHeight(getHeight(node.leftChild), getHeight(node.rightChild)) + 1;
+    
+        // Check balance factor of current node
+        int balanceFactor = getBalanceFactor(node);
+
+        // Rebalance the tree if unbalanced
+        if (balanceFactor > 1) {
+            // Left heavy case
+            if (getBalanceFactor(node.leftChild) >= 0) {
+                return LLRotation(node); // Left Left Case
+            } else {
+                return LRRotation(node); // Left Right Case
+            }
+        } else if (balanceFactor < -1) {
+            // Right heavy case
+            if (getBalanceFactor(node.rightChild) <= 0) {
+                return RRRotation(node); // Right Right Case
+            } else {
+                return RLRotation(node); // Right Left Case
+            }
+        }
+
         return node;
     }
 
